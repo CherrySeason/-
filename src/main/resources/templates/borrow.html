@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>借阅管理</title>
+    <meta name="description" content="这是管理员页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <script src="https://cdn.bootcss.com/echarts/3.7.2/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+
+</head>
+<body data-type="widgets">
+<script src="assets/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header>
+            <!-- logo -->
+            <div class="am-fl tpl-header-logo">
+                <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                 <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+                </div>
+              
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="javascript:;">欢迎你, <span th:text="${user}">Amaze UI</span> </a>
+                        </li>
+
+                       
+                           
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="javascript:;" id="exitlogin">
+                                <span class="am-icon-sign-out"></span> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </header>
+       
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar">
+            <!-- 用户信息 -->
+            <div class="tpl-sidebar-user-panel">
+                <div class="tpl-user-panel-slide-toggleable">
+                    <div class="tpl-user-panel-profile-picture">
+                        <img src="assets/img/user04.png" alt="">
+                    </div>
+                    <span class="user-panel-logged-in-text" th:text="${username}">
+              禁言小张
+          </span>
+                  
+                </div>
+            </div>
+
+
+            <!-- 菜单 -->
+            <ul class="sidebar-nav">
+                
+                 <li class="sidebar-nav-link" id="index">
+                    <a>
+                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="bookad">
+                    <a>
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 图书管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="borrowad">
+                    <a class="active">
+                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 借阅管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="readerad">
+                    <a >
+                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 读者管理
+
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="selfad">
+                    <a >
+                        <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 个人信息
+
+                    </a>
+                </li>
+</ul>
+</div>
+
+<div class="tpl-content-wrapper">
+
+            <div class="container-fluid am-cf">
+
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-9" style="width:300px;">
+<form class="am-form tpl-form-line-form">
+   <div class="am-form-group">
+
+                        <input type="text" class="tpl-form-input" id="bookid" placeholder="请输入书号"></span>
+
+                    </div>
+<div class="am-form-group">
+                        <input type="text" class="tpl-form-input" id="userid" placeholder="请输入用户名"></span>
+
+                    </div>
+                        <button type="button"  class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" id="borrowbook">借书</button>
+                        <button type="button"  class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" id="returnbook">还书</button>
+                    </div>
+</form>
+
+                        
+                    </div>
+                    <div class="am-u-lg-3 tpl-index-settings-button">
+ <!-- 搜索 -->
+                <div class="am-fl tpl-header-search">
+                    <form class="tpl-header-search-form" action="javascript:;">
+                       
+                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容..." id="seacontent">
+ <button class="tpl-header-search-btn am-icon-search" id="searchborrow"></button>
+                    </form>
+                </div>
+               
+
+            </div>
+ </div>
+
+ <div class="row">
+
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">借阅管理</div>
+                                <div class="widget-function am-fr">
+                                 <p class="page-header-description">注意：修改和删除后的借阅信息不可恢复，故请三思而后行</p>
+                                </div>
+ 
+                            </div>
+                            <div class="widget-body  widget-body-lg am-fr" id="list" th:fragment="borrow">
+
+                                <table width="100%" class="am-table am-table-compact am-table-bordered tpl-table-black " id="example-r">
+                                    <thead>
+                                        <tr>
+                                            <th>书号</th>
+                                            <th>用户名</th>
+                                            <th>借书时间</th>
+                                            <th>还书时间</th>
+                                            <th>应还时间</th>
+                                            <th>罚款</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="gradeX" th:each="record,indexInc:${showborrow}">
+                                            <td th:text="${record.getBorrowid().getBooksid()}" th:id="(${indexInc.index}+2000)">A00001</td>
+                                            <td th:text="${record.getBorrowid().getUsersid()}" th:id="(${indexInc.index}+1)">000001</td>
+                                            <td th:text="${record.getBorrowtime()}" th:id="(${indexInc.index}+4000)">2019-10-11</td>
+                                            <td th:text="${record.getReturntime()}">2019-11-01</td>
+                                            <td th:text="${record.getShouldTime()}">2019-11-11</td>
+                                            <td th:text="${record.getFine()}">0</td>
+                                            <td>
+                                                <div class="tpl-table-black-operation">
+                                                    <a href="javascript:;" id="editrecord" th:onclick="|editRecord((${indexInc.index}+2000),(${indexInc.index}+1))|">
+                                                        <i class="am-icon-pencil"></i> 还款
+                                                    </a>
+                                                    <a href="javascript:;" class="tpl-table-black-operation-del" id="deleterecord" th:onclick="|deleteRecord((${indexInc.index}+2000),(${indexInc.index}+1),(${indexInc.index}+4000))|">
+                                                        <i class="am-icon-trash"></i> 删除
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                       
+                                        <!-- more data -->
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+               
+
+<script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/amazeui.datatables.min.js"></script>
+    <script src="assets/js/dataTables.responsive.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+
+
+   
+</body>
+<script src="jquery-3.3.1.js"></script>
+<script>
+	$("#searchborrow").click(function(){
+    var content=$("#seacontent").val();
+      if(content==""){
+          alert("请输入搜索内容！");
+    }
+    else{
+       $("#list").html("");
+       var info={"content":content};  
+        $.ajax({
+            type:"POST",
+            url:"/searchborrow",
+            data:info,
+            success:function(data){             
+                $("#list").html(data);
+            }
+        });
+   }
+});
+</script>
+<script src="jquery-3.3.1.js"></script>
+<script>
+$("#borrowbook").click(function(){
+    var booksid=$("#bookid").val();
+    var usersid=$("#userid").val();
+     var info={"booksid":booksid,"usersid":usersid};
+      if(booksid==""){
+          alert("请输入书号！");
+    }
+     else if(usersid==""){
+          alert("请输入用户名！");
+     }
+     else{
+        $.ajax({
+            type:"PUT",
+            url:"/borrowbook",
+            data:info,
+           success:function(msg){      
+               if(msg=="")
+                    alert("借书失败！");
+               else
+                    alert("借书成功！");
+                location.reload();
+                window.location=msg+window.location.search;
+            },
+        });
+   }
+});
+</script>
+<script src="jquery-3.3.1.js"></script>
+<script>
+$("#returnbook").click(function(){
+    var booksid=$("#bookid").val();
+    var usersid=$("#userid").val();
+     var info={"booksid":booksid,"usersid":usersid};
+      if(booksid==""){
+          alert("请输入书号！");
+    }
+     else if(usersid==""){
+          alert("请输入用户名！");
+     }
+     else{
+        $.ajax({
+            type:"PUT",
+            url:"/returnbook",
+            data:info,
+            success:function(msg){      
+                if(msg=="1"){
+                     alert("本书不在馆!");
+                }
+                else if(msg=="2")
+                    alert("请用户先还款！");       
+                else{
+                     alert("还书成功！");
+                     location.reload();
+                     window.location=msg+window.location.search;
+                }
+            },
+            error:function(){
+               alert("系统错误！");
+            }
+        });
+   }
+});
+</script>
+<script src="jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    function deleteRecord(book,user,bo){
+       var boo=book.toString();
+       var us=user.toString();
+       var bookid=$("#"+boo).text();
+       var userid=$("#"+us).text();
+       var info={"bookid":bookid,"userid":userid};
+       var r=confirm("你确定删除吗?");
+       if(r==true){
+        $.ajax({
+            type:"PUT",
+            url:"/deleteborrow",
+            data:info,
+            success:function(msg){
+               if(msg==""){
+                     alert("请用户先还书！");
+                }       
+                else{
+                   alert("删除成功！");
+                   location.reload();
+                   window.location=msg+window.location.search;
+               }
+            }
+        });
+       }
+};
+</script>
+<script src="jquery-3.3.1.js"></script>
+<script type="text/javascript">
+     function editRecord(book,user){
+       var boo=book.toString();
+       var us=user.toString();
+       var bookid=$("#"+boo).text();
+       var userid=$("#"+us).text();
+       var info={"bookid":bookid,"userid":userid};
+      
+       if(confirm("你确定该用户已还款了吗?")){
+            $.ajax({
+            type:"POST",
+            url:"/editborrow",
+            data:info,
+            success:function(msg){
+                 alert("还款成功！");
+                 $("#list").html(msg);
+            },
+            error:function(){
+                alert("系统错误");
+            }
+        });
+       }
+     }
+</script>
+<script text="text/javascript">
+    document.getElementById("index").onclick=function(){
+        window.location="index"+window.location.search;
+    }
+document.getElementById("bookad").onclick=function(){
+        window.location="book"+window.location.search;
+    }
+document.getElementById("borrowad").onclick=function(){
+        window.location="borrow"+window.location.search;
+    }
+document.getElementById("readerad").onclick=function(){
+        window.location="reader"+window.location.search;
+    }
+document.getElementById("selfad").onclick=function(){
+        window.location="selfinfo"+window.location.search;
+    }
+document.getElementById("exitlogin").onclick=function(){
+        if(confirm("确认退出吗？")){
+              window.location="login"+window.location.search;
+        }
+    }
+</script>
+</html>

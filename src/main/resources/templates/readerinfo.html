@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///C:/Users/Lenovo/Desktop/amazeUI/reader.html -->
+<html lang="en" class="js cssanimations"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>个人信息</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+     <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI">
+    <script src="https://cdn.bootcss.com/echarts/3.7.2/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css">
+   <script src="assets/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets" class="theme-black" style="">
+    <script src="./readerinfo_files/theme.js.下载"></script>
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header>
+            <!-- logo -->
+            <div class="am-fl tpl-header-logo">
+                <a href="javascript:;"><img src="./readerinfo_files/logo.png" alt=""></a>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+                </div>
+              
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="javascript:;">欢迎你, <span th:text="${user}">Amaze UI</span> </a>
+                        </li>
+
+                       
+                           
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="javascript:;" id="exitlogin">
+                                <span class="am-icon-sign-out"></span> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </header>
+        
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar">
+            <!-- 用户信息 -->
+            <div class="tpl-sidebar-user-panel">
+                <div class="tpl-user-panel-slide-toggleable">
+                    <div class="tpl-user-panel-profile-picture">
+                        <img src="./readerinfo_files/user04.png" alt="">
+                    </div>
+                    <span class="user-panel-logged-in-text" th:text="${username}">
+              <i class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
+              禁言小张
+          </span>
+                    
+                </div>
+            </div>
+
+            <!-- 菜单 -->
+            <ul class="sidebar-nav">
+                
+                <li class="sidebar-nav-link"  id="index2">
+                    <a >
+                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
+                    </a>
+                </li>
+                <li class="sidebar-nav-link"  id="findbook">
+                    <a >
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 图书查询
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="record">
+                    <a>
+                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 借阅记录
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="readerinfo">
+                    <a class="active">
+                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 个人信息
+
+                    </a>
+                </li>
+              
+
+    <script src="./readerinfo_files/amazeui.min.js.下载"></script>
+    <script src="./readerinfo_files/amazeui.datatables.min.js.下载"></script>
+    <script src="./readerinfo_files/dataTables.responsive.min.js.下载"></script>
+    <script src="./readerinfo_files/app.js.下载"></script>
+
+
+
+</ul></div>
+<div class="tpl-login" style="position:absolute;left:-230px;top:-80px;">
+            <div class="tpl-login-content" >
+                <div class="tpl-login-title">个人信息</div>
+                
+
+
+                <form class="am-form tpl-form-line-form">
+                    <div class="am-form-group">
+                        <span style="color:white;">用户名:</span>
+                        <input type="text" class="tpl-form-input" id="userid" readonly  unselectable="on" th:value="${userid}">
+
+                    </div>
+
+                    <div class="am-form-group">
+                        <span style="color:white;">姓名:</span>
+                        <input type="text"  id="username"  th:value="${name}">
+                    </div>
+
+                    <div class="am-form-group">
+                         <span style="color:white;">联系电话：</span>
+                        <input type="text" class="tpl-form-input" id="userphone" th:value="${phone}">
+                    </div>
+
+                    <div class="am-form-group">
+                         <span style="color:white;">借书权限:</span>
+                        <input type="text" class="tpl-form-input" id="usercan" readonly  unselectable="on" th:value="${iscan}">
+                    </div>
+
+<div class="am-form-group">
+
+                        <button type="button" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" id="submitinfo">提交</button>
+                        <button type="button" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" id="changepass">修改密码</button>
+
+                    </div>
+
+                   
+</div>
+</div></body>
+<script src="jquery-3.3.1.js"></script>
+<script type="text/javascript">
+      $("#submitinfo").click(function(){
+       var userid=$("#userid").val();
+       var username=$("#username").val();
+       var phone=$("#userphone").val(); 
+       var info={"userid":userid,"username":username,"phone":phone};
+       if(username=="")
+           alert("姓名不能为空！");
+       else{
+       $.ajax({
+            type:"PUT",
+            url:"/updatereaderinfo",
+            data:info,
+            success:function(msg){
+              if(msg==""){
+                   alert("手机号只能为11位！");
+               }
+              else{
+                alert("修改成功！");
+                location.reload();
+                window.location=msg+window.location.search;
+              }
+            }
+        });
+       }
+     });
+</script>
+<script text="text/javascript">
+    document.getElementById("index2").onclick=function(){
+        window.location="index2"+window.location.search;
+    }
+document.getElementById("findbook").onclick=function(){
+        window.location="findbook"+window.location.search;
+    }
+document.getElementById("record").onclick=function(){
+        window.location="record"+window.location.search;
+    }
+document.getElementById("readerinfo").onclick=function(){
+        window.location="readerinfo"+window.location.search;
+    }
+document.getElementById("changepass").onclick=function(){
+        window.location="readerpass"+window.location.search;
+    }
+document.getElementById("exitlogin").onclick=function(){
+        if(confirm("确认退出吗？")){
+              window.location="login"+window.location.search;
+        }
+    }
+</script>
+</html>

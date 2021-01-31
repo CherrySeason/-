@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>借阅管理</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/fullcalendar.min.css" />
+    <link rel="stylesheet" href="assets/css/fullcalendar.print.css" media='print' />
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets">
+    <script src="assets/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header>
+            <!-- logo -->
+            <div class="am-fl tpl-header-logo">
+                <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+                </div>
+                
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="javascript:;">欢迎你, <span  th:text="${user}">Amaze UI</span> </a>
+                        </li>
+
+                        
+
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="javascript:;">
+                                <span class="am-icon-sign-out"></span> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </header>
+        
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar">
+            <!-- 用户信息 -->
+            <div class="tpl-sidebar-user-panel">
+                <div class="tpl-user-panel-slide-toggleable">
+                    <div class="tpl-user-panel-profile-picture">
+                        <img src="assets/img/user04.png" alt="">
+                    </div>
+                    <span class="user-panel-logged-in-text" th:text="${username}">
+              禁言小张
+          </span>
+                  
+                </div>
+            </div>
+
+
+            <!-- 菜单 -->
+            <ul class="sidebar-nav">
+                
+                 <li class="sidebar-nav-link" id="index">
+                    <a>
+                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="bookad">
+                    <a>
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 图书管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="borrowad">
+                    <a class="active">
+                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 借阅管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="readerad">
+                    <a >
+                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 读者管理
+
+                    </a>
+                </li>
+                <li class="sidebar-nav-link" id="selfad">
+                    <a >
+                        <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 个人信息
+
+                    </a>
+                </li>
+</ul>
+</div>
+
+<div class="tpl-content-wrapper">
+
+            <div class="container-fluid am-cf">
+
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-9" style="width:300px;">
+<form class="am-form tpl-form-line-form">
+   <div class="am-form-group">
+
+                        <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入书号"></span>
+
+                    </div>
+<div class="am-form-group">
+                        <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入用户名"></span>
+
+                    </div>
+                        <button type="button"  class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">借书</button>
+                        <button type="button"  class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">还书</button>
+                    </div>
+</form>
+
+                        
+                    </div>
+                    <div class="am-u-lg-3 tpl-index-settings-button">
+ 
+               
+
+            </div>
+ </div>
+
+ <div class="row">
+
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">借阅管理</div>
+                                <div class="widget-function am-fr">
+                                 <p class="page-header-description">注意：修改和删除后的借阅信息不可恢复，故请三思而后行</p>
+                                </div>
+ 
+                            </div>
+                            <div class="widget-body  widget-body-lg am-fr">
+
+                                <table width="100%" class="am-table am-table-compact am-table-bordered tpl-table-black " id="example-r">
+                                    <thead>
+                                        <tr>
+                                            <th>书号</th>
+                                            <th>用户名</th>
+                                            <th>借书时间</th>
+                                            <th>还书时间</th>
+                                            <th>应还时间</th>
+                                            <th>罚款</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="gradeX">
+                                            <td>A00001</td>
+                                            <td>000001</td>
+                                            <td>2019-10-11</td>
+                                            <td>2019-11-01</td>
+                                            <td>2019-11-11</td>
+                                            <td>0</td>
+                                            <td>
+                                                <div class="tpl-table-black-operation">
+                                                    <a href="javascript:;">
+                                                        <i class="am-icon-pencil"></i> 编辑
+                                                    </a>
+                                                    <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                        <i class="am-icon-trash"></i> 删除
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                       
+                                        <!-- more data -->
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+               
+
+
+
+
+
+   
+</body>
+<script text="text/javascript">
+    document.getElementById("index").onclick=function(){
+        window.location="index"+window.location.search;
+    }
+document.getElementById("bookad").onclick=function(){
+        window.location="book"+window.location.search;
+    }
+document.getElementById("borrowad").onclick=function(){
+        window.location="borrow"+window.location.search;
+    }
+document.getElementById("readerad").onclick=function(){
+        window.location="reader"+window.location.search;
+    }
+document.getElementById("selfad").onclick=function(){
+        window.location="selfinfo"+window.location.search;
+    }
+</script>
+</html>
