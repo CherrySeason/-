@@ -101,12 +101,12 @@ public class AdminController {
 	 }
 	 
 	 @RequestMapping(value = "/editbook",method = RequestMethod.GET)
-	 public String showbookinfo(@CookieValue("userid")String user,Map<String, Object> paramMap,String id) {
+	 public String showbookinfo(@CookieValue("userid") String user, Map<String, Object> paramMap) {
 		 User sUser=userService.findByUserid(user);
 		 paramMap.put("user", sUser.getUserid());
 		 paramMap.put("username", sUser.getUsername());
 		 //System.out.println(user);
-		 id=setbookString(bookstr);
+		 String id = setbookString(bookstr);
 		 Book book=bookService.findByBookid(id);
 		 //System.out.println(id);
 		 paramMap.put("bookid", id);
@@ -116,7 +116,7 @@ public class AdminController {
 		 paramMap.put("introduction", book.getIntroduction());
 		 
 		 //获取类型名
-		 String classString=id.substring(0, 1);
+		 String classString= id.substring(0, 1);
 		 //System.out.println(classString);
 		 Classific c=classService.findByClassid(classString);
 		 paramMap.put("classification", c.getClassname());
@@ -127,13 +127,13 @@ public class AdminController {
 	 @ResponseBody
 	 public String insertBook(@RequestParam(value = "bookname")String bookname,@RequestParam(value = "author")String author,@RequestParam(value = "publichouse")String publichouse,@RequestParam(value = "introduction")String introduction,@RequestParam(value = "classification")String classification) {
 		 Book book=new Book();
-		 String bookid="";
+		 String bookid;
 		 do {
         	 Random random = new Random();
-        	 String id="";
+        	 StringBuilder id= new StringBuilder();
         	 for (int i=0;i<6;i++)
         	 {
-        	     id+=random.nextInt(10);
+        	     id.append(random.nextInt(10));
         	 }
         	 //System.out.println(id);
              bookid=classification+id;
@@ -144,7 +144,7 @@ public class AdminController {
 		 book.setIntroduction(introduction);
 		 book.setPublichouse(publichouse);
 		 book.setin(true);
-		 book=bookService.saveAndFlush(book);
+		 bookService.saveAndFlush(book);
 		 return "insertbook";
 	 }
 	 
@@ -156,7 +156,7 @@ public class AdminController {
 		 book.setAuthor(author);
 		 book.setIntroduction(introduction);
 		 book.setPublichouse(publichouse);
-		 book=bookService.saveAndFlush(book);
+		 bookService.saveAndFlush(book);
 		 return "editbook";
 	 }
 	 
@@ -189,19 +189,19 @@ public class AdminController {
 		 
 		 Timestamp ts=new Timestamp(new Date().getTime());
 		 Date now=new Date(ts.getTime());
-		 for(int i=0;i<list.size();i++) {
-			 
-			// System.out.println(list.get(i).getBorrowtime());
-			 if(list.get(i).getShouldTime().before(ts)) {		
-				 Date should=new Date(list.get(i).getShouldTime().getTime());
-				 long day=(now.getTime()-should.getTime())/(24*60*60*1000);
-				 int fine=(int) (day*0.5);
-				 list.get(i).setFine(fine);
+		 for (Record record : list) {
+
+			 // System.out.println(list.get(i).getBorrowtime());
+			 if (record.getShouldTime().before(ts)) {
+				 Date should = new Date(record.getShouldTime().getTime());
+				 long day = (now.getTime() - should.getTime()) / (24 * 60 * 60 * 1000);
+				 int fine = (int) (day * 0.5);
+				 record.setFine(fine);
 //				 System.out.println(day);
 //				 System.out.println(should);
 //				 System.out.println(list.get(i).getFine());
 //				 System.out.println(list.get(i).getBorrowid().getBorrowtime());
-				 recordService.saveAndFlush(list.get(i));
+				 recordService.saveAndFlush(record);
 			 }
 		 }
 		 
@@ -252,8 +252,8 @@ public class AdminController {
 		 User user=userService.findByUserid(usersid);
 		 List<Record> list=recordService.findByBorrowidUsersid(usersid);
 		 float temp=(float) 0.0;
-		 for(int i=0;i<list.size();i++) {
-			 temp+=list.get(i).getFine();
+		 for (Record value : list) {
+			 temp += value.getFine();
 		 }
 		 if (!book.isin() || user.getBorrownum()>=10 || temp>0) {
 			 System.out.println(book.isin());
@@ -286,16 +286,16 @@ public class AdminController {
 			//record.setReturntime(null);
 			record.setFine(0);
 			
-			record=recordService.saveAndFlush(record);
+			recordService.saveAndFlush(record);
 			book.setin(false);
-			book=bookService.saveAndFlush(book);
+			bookService.saveAndFlush(book);
 			if(user.getBorrownum()<10) {
 			    int num=user.getBorrownum()+1;
 			    user.setBorrownum(num);
 			    if(num==10)
 			    	user.setIscan(false);
 			}
-			user=userService.saveAndFlush(user);
+			userService.saveAndFlush(user);
 			
 		}
 		 return "borrow";
@@ -309,12 +309,11 @@ public class AdminController {
 		 Book book=bookService.findByBookid(booksid);
 		 User user=userService.findByUserid(usersid);
 		 List<Record> list=recordService.findByReturntimeIsNull();
-		 for(int i=0;i<list.size();i++) {
-			 String useridString=list.get(i).getBorrowid().getUsersid();
-			 String bookidString=list.get(i).getBorrowid().getBooksid();
-			 if(usersid.equals(useridString) && booksid.equals(bookidString))
-			 {
-				 record=list.get(i);
+		 for (Record value : list) {
+			 String useridString = value.getBorrowid().getUsersid();
+			 String bookidString = value.getBorrowid().getBooksid();
+			 if (usersid.equals(useridString) && booksid.equals(bookidString)) {
+				 record = value;
 			 }
 		 }
 		// System.out.println(book.isin());
@@ -326,16 +325,16 @@ public class AdminController {
 			//保存日期和主键
 			Timestamp ts=new Timestamp(new Date().getTime());
 			record.setReturntime(ts);
-			record=recordService.saveAndFlush(record);
+			recordService.saveAndFlush(record);
 			book.setin(true);
-			book=bookService.saveAndFlush(book);
+			bookService.saveAndFlush(book);
 			
 			int num=user.getBorrownum()-1;
 			if(num<=9)
 				user.setIscan(true);
 			user.setBorrownum(num);
 				
-			user=userService.saveAndFlush(user);
+			userService.saveAndFlush(user);
 			return "borrow";
 		}
 		 
@@ -357,8 +356,8 @@ public class AdminController {
 		 //System.out.println(user);
 		 List<Record> record=recordService.findByBorrowidUsersid(userid);
 		 float temp=0;
-		 for(int i=0;i<record.size();i++) {
-			 temp+=record.get(i).getFine();
+		 for (Record value : record) {
+			 temp += value.getFine();
 		 }
 		 User user=userService.findByUserid(userid);
 		 if(temp>0 || user.getBorrownum()>0) return "";
@@ -374,13 +373,13 @@ public class AdminController {
 		 //System.out.println(user);
 		 
 		 List<User> list=userService.findByUsernameLikeOrPhoneLikeOrUseridLike(content, content, content);
-		 List<User> users=new ArrayList<User>();
+		 List<User> users= new ArrayList<>();
 		 String idString="1";
-		 for (int i = 0; i < list.size(); i++) {
-			if (idString.equals(list.get(i).getId())) {
-				users.add(list.get(i));
-			}
-		}
+		 for (User user : list) {
+			 if (idString.equals(user.getId())) {
+				 users.add(user);
+			 }
+		 }
 		 map.addAttribute("list", users);
 	     return "reader::reader";
 	 }
@@ -395,10 +394,10 @@ public class AdminController {
          String userid;
          do {
         	 Random random = new Random();
-        	 String id="";
+        	 StringBuilder id= new StringBuilder();
         	 for (int i=0;i<6;i++)
         	 {
-        	     id+=random.nextInt(10);
+        	     id.append(random.nextInt(10));
         	 }
         	 //System.out.println(id);
              userid="1"+id;
@@ -410,7 +409,7 @@ public class AdminController {
          iUser.setUserid(userid);
          iUser.setUsername(username);
          iUser.setPhone(userphone);
-         iUser=userService.saveAndFlush(iUser);
+         userService.saveAndFlush(iUser);
 
 	     return "reader";
 	 }
@@ -428,12 +427,12 @@ public class AdminController {
 	}
 	 
 	 @RequestMapping(value = "/editreader",method = RequestMethod.GET)
-	 public String showread(@CookieValue("userid")String user,Map<String, Object> paramMap,String id) {
+	 public String showread(@CookieValue("userid") String user, Map<String, Object> paramMap) {
 		 User sUser=userService.findByUserid(user);
 		 paramMap.put("user", sUser.getUserid());
 		 paramMap.put("username", sUser.getUsername());
 		 //System.out.println(user);
-		 id=getString(userstring);
+		 String id = getString(userstring);
 		 User s=userService.findByUserid(id);
 		 //System.out.println(id);
 		 paramMap.put("userid", id);
@@ -453,7 +452,7 @@ public class AdminController {
 		 else {
 		     sUser.setUsername(name);
 		     sUser.setPhone(phone);
-		     sUser=userService.saveAndFlush(sUser);
+		     userService.saveAndFlush(sUser);
 		     return "editreader";
 		 }
 	 }
@@ -463,7 +462,7 @@ public class AdminController {
 	 public String upReaderpass(@RequestParam(value = "id")String id) {
 		 User sUser=userService.findByUserid(id);
 		 sUser.setUpassword("123456");
-		 sUser=userService.saveAndFlush(sUser);
+		 userService.saveAndFlush(sUser);
 		 return "editreader";
 	 }
 	 
@@ -490,7 +489,7 @@ public class AdminController {
 		 else {
 		     s.setUsername(username);
 		     s.setPhone(phone);
-		     s=userService.saveAndFlush(s);
+		     userService.saveAndFlush(s);
 		     return "selfinfo";
 		 }
 	 }
@@ -511,7 +510,7 @@ public class AdminController {
 		 User s=userService.findByUserid(userid);
 		 if (oldpass.equals(s.getUpassword())) {
 			s.setUpassword(newpass);
-			s=userService.saveAndFlush(s);
+			userService.saveAndFlush(s);
 			//System.out.println("ddd");
 			return "selfchange";
 		}
