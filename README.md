@@ -51,3 +51,5 @@
 git clone https://github.com/CherrySeason/book-borrowing-system.git
 
 springboot自动配置会装载依赖包，需要修改的地方是src/main/resources/application.properties中的数据库配置，需要改为适应本机的配置。
+
+需要在本地数据库中创建数据库Book，然后导入sql文件运行，生成数据。
