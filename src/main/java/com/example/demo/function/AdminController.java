@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -41,6 +40,9 @@ public class AdminController {
 	RecordService recordService;
 	@Autowired
 	ClassService classService;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	 public String showindex(@CookieValue("userid")String user,Map<String, Object> paramMap) {
 		//从数据库读取用户信息 
@@ -171,6 +173,7 @@ public class AdminController {
 	 }
 	 
 	 @RequestMapping(value = "/searchborrow",method = RequestMethod.POST)
+//	 @Cacheable(value="user-key")
 	 public String searchBorrow(Model map,@RequestParam(value = "content") String content) {
 		 //System.out.println(user);
 		 //System.out.println(content);
@@ -186,11 +189,10 @@ public class AdminController {
 		 paramMap.put("user", sUser.getUserid());
 		 paramMap.put("username", sUser.getUsername());
 		 List<Record> list=recordService.findByReturntimeIsNull();
-		 
+
 		 Timestamp ts=new Timestamp(new Date().getTime());
 		 Date now=new Date(ts.getTime());
 		 for (Record record : list) {
-
 			 // System.out.println(list.get(i).getBorrowtime());
 			 if (record.getShouldTime().before(ts)) {
 				 Date should = new Date(record.getShouldTime().getTime());
@@ -204,7 +206,7 @@ public class AdminController {
 				 recordService.saveAndFlush(record);
 			 }
 		 }
-		 
+
 		 List<Record> newlist=recordService.findAll();
 		 map.addAttribute("showborrow", newlist);
 		 return "borrow";
@@ -212,14 +214,17 @@ public class AdminController {
 	 
 	 @RequestMapping(value = "/deleteborrow",method = RequestMethod.PUT)
 	 @ResponseBody 
-	 public String deleteBorrow(ModelMap map,Map<String, Object> paramMap,@RequestParam(value = "userid") String userid,@RequestParam(value = "bookid") String bookid) {
+	 public String deleteBorrow(@RequestParam(value = "userid") String userid, @RequestParam(value = "bookid") String bookid) {
 		 //System.out.println(user);
 		 Borrowid idsId=new Borrowid();
 		 idsId.setBooksid(bookid);
 		 idsId.setUsersid(userid);
 		 if(recordService.findByBorrowid(idsId).getReturntime()==null)
 			 return "";
-		 else recordService.deleteByBorrowid(idsId);
+		 else{
+//			 redisUtils.setRemove("record", idsId);
+			 recordService.deleteByBorrowid(idsId);
+		 }
 	     return "borrow";
 	 }
 	 
@@ -352,7 +357,7 @@ public class AdminController {
 	 }
 	 @RequestMapping(value = "/deletereader",method = RequestMethod.PUT)
 	 @ResponseBody
-	 public String deleteReader(ModelMap map,Map<String, Object> paramMap,@RequestParam(value = "userid") String userid) {
+	 public String deleteReader(@RequestParam(value = "userid") String userid) {
 		 //System.out.println(user);
 		 List<Record> record=recordService.findByBorrowidUsersid(userid);
 		 float temp=0;
@@ -386,7 +391,7 @@ public class AdminController {
 
 	 @RequestMapping(value = "/insertreader",method = RequestMethod.PUT)
 	 @ResponseBody
-	 public String insertReader(ModelMap map,Map<String, Object> paramMap,@RequestParam(value = "username") String username,@RequestParam(value = "userphone") String userphone) {
+	 public String insertReader(@RequestParam(value = "username") String username, @RequestParam(value = "userphone") String userphone) {
          //判断电话号码位数
 		 if(userphone.length()!=11)
 			 return "";
@@ -506,7 +511,7 @@ public class AdminController {
 	 }
 	 
 	 @RequestMapping(value = "/updatepass",method = RequestMethod.PUT)
-	 public String updatepass(@RequestParam(value = "userid")String userid,Map<String, Object> paramMap,@RequestParam(value = "oldpass")String oldpass,@RequestParam(value = "newpass")String newpass) {
+	 public String updatepass(@RequestParam(value = "userid") String userid, @RequestParam(value = "oldpass") String oldpass, @RequestParam(value = "newpass") String newpass) {
 		 User s=userService.findByUserid(userid);
 		 if (oldpass.equals(s.getUpassword())) {
 			s.setUpassword(newpass);

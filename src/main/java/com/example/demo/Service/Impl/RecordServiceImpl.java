@@ -1,9 +1,13 @@
 package com.example.demo.Service.Impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.Redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.util.CastUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,13 +16,15 @@ import com.example.demo.Entity.Borrowid;
 import com.example.demo.Entity.Record;
 
 import com.example.demo.Service.RecordService;
+
 @Service
 @Transactional
 public class RecordServiceImpl implements RecordService{
 
 	@Autowired
 	private RecordDao recordDao;
-	
+	@Autowired
+	private RedisService redisService;
 
 	@Override
 	public Record saveAndFlush(Record record) {
@@ -29,10 +35,18 @@ public class RecordServiceImpl implements RecordService{
 	@Override
 	public List<Record> findAll() {
 		// TODO Auto-generated method stub
-		return recordDao.findAll();
-	}
+		List<Record> records;
+		String key = "records";
+		Object recordCache = redisService.get(key);
 
-	
+		if(recordCache==null){
+			records=recordDao.findAll();
+			redisService.set(key,records);
+		}else{
+			records = castList(recordCache, Record.class);
+		}
+		return records;
+	}
 
 	@Override
 	public List<Record> findByBorrowidUsersidLikeOrBorrowidBooksidLike(String usersid,String booksid) {
@@ -83,13 +97,26 @@ public class RecordServiceImpl implements RecordService{
 	}
 
 	@Override
-	public Record findByBorrowid(Borrowid id) {
+	public Record findByBorrowid(Borrowid borrowid) {
 		// TODO Auto-generated method stub
-		return recordDao.findByBorrowid(id);
+		return recordDao.findByBorrowid(borrowid);
 	}
 
 
-
+	//类型转换
+	public static <T> List<T> castList(Object obj, Class<T> clazz)
+	{
+		List<T> result = new ArrayList<T>();
+		if(obj instanceof List<?>)
+		{
+			for (Object o : (List<?>) obj)
+			{
+				result.add(clazz.cast(o));
+			}
+			return result;
+		}
+		return null;
+	}
 
 
 }
