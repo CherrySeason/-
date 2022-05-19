@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import org.springframework.data.annotation.Immutable;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "recordsview")
+@Immutable
 public class View  implements Serializable{
 
 	/**
