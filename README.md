@@ -26,13 +26,6 @@
 (1)	按照不同条件查看书的信息
 (2)	修改个人信息及密码
 
-其中数据库设计有四个表：
-
-用户（用户名、密码、姓名、联系电话、身份号、借书数、借书权限）
-图书（书号、书名、作者、出版社、简介、在馆情况）
-借阅记录（书号、用户名、借书时间、应还时间、罚款）
-类型（类型代码、类型名）
-
 以下举例两种用户的登录，需要登录其他用户则要查询数据库：
 
 管理员登录：
@@ -53,3 +46,7 @@ git clone https://github.com/CherrySeason/book-borrowing-system.git
 springboot自动配置会装载依赖包，需要修改的地方是src/main/resources/application.properties中的数据库配置，需要改为适应本机的配置。
 
 需要在本地数据库中创建数据库Book，然后导入sql文件运行，生成数据。
+
+# 迭代版本
+
+基于本项目构建了一个spring cloud项目，位于https://github.com/CherrySeason/springboot-booksys.git
