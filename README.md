@@ -45,7 +45,19 @@ git clone https://github.com/CherrySeason/book-borrowing-system.git
 
 springboot自动配置会装载依赖包，需要修改的地方是src/main/resources/application.properties中的数据库配置，需要改为适应本机的配置。
 
+需要修改pom.xml中
+
+<dependency>
+<groupId>mysql</groupId>
+<artifactId>mysql-connector-java</artifactId>
+<version>8.0.27</version>
+</dependency>
+
+mysql的依赖包为自己mysql的版本
+
 需要在本地数据库中创建数据库Book，然后导入sql文件运行，生成数据。
+
+在使用前需要打开redis，确认redis的端口是否是6379，并且如果有密码需要修改application.properties中redis的相关配置。
 
 # 迭代版本
 
