@@ -61,4 +61,4 @@ mysql的依赖包为自己mysql的版本
 
 # 迭代版本
 
-基于本项目构建了一个spring cloud项目，位于https://github.com/CherrySeason/springboot-booksys.git
+基于本项目构建了一个spring cloud项目，位于https://github.com/CherrySeason/springcloud-booksys.git
